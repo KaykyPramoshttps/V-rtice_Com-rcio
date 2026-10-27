@@ -35,11 +35,5 @@ Modelo em estrela, com a tabela fato **Vendas** ligada às dimensões **Produtos
 ## 🛠️ Ferramentas
 Power BI Desktop (formato PBIP) · Power Query · DAX · Excel (fonte de dados)
 
-## ▶️ Como abrir
-1. Clone o repositório.
-2. Abra o arquivo `Painel_de_vendas.pbip` no Power BI Desktop.
-3. Em *Transformar dados*, ajuste o caminho do arquivo Excel de origem (`base_vendas_casa_conforto.xlsx`) para o local no seu computador.
-4. Clique em **Atualizar**.
-
 ## 👩‍💻 Autor
 Seu nome · [LinkedIn](link)
