@@ -1,0 +1,61 @@
+table Produtos
+	lineageTag: f1958257-5c1d-4b56-b484-9c96ae6f223e
+
+	column ID_Produto
+		dataType: string
+		lineageTag: 179cbf17-0234-45b5-b79c-890ff0e21b57
+		summarizeBy: none
+		sourceColumn: ID_Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Produto
+		dataType: string
+		lineageTag: 16671d8e-68a6-4b9d-aba0-93d5bc4ec945
+		summarizeBy: none
+		sourceColumn: Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Categoria
+		dataType: string
+		lineageTag: 9980f698-6043-4dba-8c3d-d4b2cc9250a1
+		summarizeBy: none
+		sourceColumn: Categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column Preco_Tabela
+		dataType: double
+		lineageTag: 9672d6a0-a67a-4185-9a83-1e4413023c12
+		summarizeBy: none
+		sourceColumn: Preco_Tabela
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Custo_Unitario
+		dataType: int64
+		formatString: 0
+		lineageTag: fb05eaae-bf17-4910-997c-68432e3545d1
+		summarizeBy: none
+		sourceColumn: Custo_Unitario
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Produtos = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Users\Millena\Downloads\MEU_PROJETO_ANALISE\base_vendas_casa_conforto.xlsx"), null, true),
+				    Produtos_Sheet = Fonte{[Item="Produtos",Kind="Sheet"]}[Data],
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Produtos_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID_Produto", type text}, {"Produto", type text}, {"Categoria", type text}, {"Preco_Tabela", type number}, {"Custo_Unitario", Int64.Type}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

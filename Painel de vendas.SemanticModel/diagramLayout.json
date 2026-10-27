@@ -1,0 +1,99 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 38.195818820912272
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 390.46961744586343,
+            "y": 396.52801230581372
+          },
+          "nodeIndex": "Clientes",
+          "nodeLineageTag": "9dc5a36f-4914-429a-8afd-5078f457968e",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 24.344355658775697,
+            "y": 335.46648580363484
+          },
+          "nodeIndex": "Produtos",
+          "nodeLineageTag": "f1958257-5c1d-4b56-b484-9c96ae6f223e",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 348.09834119744562,
+            "y": 0
+          },
+          "nodeIndex": "Vendas",
+          "nodeLineageTag": "34c78966-2c9b-411c-bf73-a65c3bcd25c6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 739.63639823558219,
+            "y": 238.89197822695076
+          },
+          "nodeIndex": "Vendedores",
+          "nodeLineageTag": "f1985acb-013d-4cad-b778-5b5b55902ab3",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 1036.1237250112576,
+            "y": 401.2431002574682
+          },
+          "nodeIndex": "Medidas",
+          "nodeLineageTag": "215fc55c-94ef-4d0c-a310-85c9f37b78d7",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 686.01040460434672,
+            "y": 2.7282727729223062
+          },
+          "nodeIndex": "Calendario",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 1
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 73.3064530735232,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

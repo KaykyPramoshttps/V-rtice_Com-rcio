@@ -1,0 +1,122 @@
+table Vendas
+	lineageTag: 34c78966-2c9b-411c-bf73-a65c3bcd25c6
+
+	column ID_Venda
+		dataType: string
+		lineageTag: 61812004-b8c6-42cf-a46b-a5a6f3d39d3f
+		summarizeBy: none
+		sourceColumn: ID_Venda
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data_Venda
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9c7f8246-5f42-4d89-a38f-bfcd86559949
+		summarizeBy: none
+		sourceColumn: Data_Venda
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ID_Cliente
+		dataType: string
+		lineageTag: b954f368-c512-45e3-a93f-c5f3e2a33714
+		summarizeBy: none
+		sourceColumn: ID_Cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Produto
+		dataType: string
+		lineageTag: 5bab86db-5950-4263-a8e0-cabce6e1e49d
+		summarizeBy: none
+		sourceColumn: ID_Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Vendedor
+		dataType: string
+		lineageTag: c0af7862-1489-4f8f-a5ef-1bdb002ea3fe
+		summarizeBy: none
+		sourceColumn: ID_Vendedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantidade
+		dataType: int64
+		formatString: 0
+		lineageTag: 92e2ddab-e80a-48a8-a928-a333b72c81f3
+		summarizeBy: sum
+		sourceColumn: Quantidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Preco_Unitario
+		dataType: double
+		lineageTag: 46264a17-39ad-4c40-8560-7ca57bbc7143
+		summarizeBy: sum
+		sourceColumn: Preco_Unitario
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Desconto
+		dataType: double
+		lineageTag: 4789ff5e-1fb5-4062-8ec6-d0d70b0ced65
+		summarizeBy: sum
+		sourceColumn: Desconto
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Canal
+		dataType: string
+		lineageTag: 8dcc991d-8484-447b-91e3-cf7050da1802
+		summarizeBy: none
+		sourceColumn: Canal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Forma_Pagamento
+		dataType: string
+		lineageTag: 66c7a9d4-aa80-4c59-8827-18d819f3c2ab
+		summarizeBy: none
+		sourceColumn: Forma_Pagamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 750c623c-8abd-43d3-a2f1-f06369e332b0
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Vendas = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Users\Millena\Downloads\MEU_PROJETO_ANALISE\base_vendas_casa_conforto.xlsx"), null, true),
+				    Vendas_Sheet = Fonte{[Item="Vendas",Kind="Sheet"]}[Data],
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Vendas_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID_Venda", type text}, {"Data_Venda", type any}, {"ID_Cliente", type text}, {"ID_Produto", type text}, {"ID_Vendedor", type text}, {"Quantidade", Int64.Type}, {"Preco_Unitario", type number}, {"Desconto", type number}, {"Canal", type text}, {"Forma_Pagamento", type text}, {"Status", type text}}),
+				    #"Erros Removidos" = Table.RemoveRowsWithErrors(#"Tipo Alterado"),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Erros Removidos",{{"Data_Venda", type date}}),
+				    #"Linhas Filtradas" = Table.SelectRows(#"Tipo Alterado1", each true),
+				    #"Linhas Filtradas1" = Table.SelectRows(#"Linhas Filtradas", each ([Desconto] <> null and [Desconto] <> "")),
+				    #"Linhas Filtradas2" = Table.SelectRows(#"Linhas Filtradas1", each [Forma_Pagamento] <> null and [Forma_Pagamento] <> ""),
+				    #"Colocar Cada Palavra Em Maiúscula" = Table.TransformColumns(#"Linhas Filtradas2",{{"Status", Text.Proper, type text}, {"Canal", Text.Proper, type text}}),
+				    #"Duplicatas Removidas" = Table.Distinct(#"Colocar Cada Palavra Em Maiúscula", {"ID_Venda"}),
+				    #"Linhas Filtradas3" = Table.SelectRows(#"Duplicatas Removidas", each ([ID_Cliente] <> "C9999"))
+				in
+				    #"Linhas Filtradas3"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

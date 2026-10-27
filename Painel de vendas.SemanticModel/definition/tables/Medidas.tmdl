@@ -1,0 +1,152 @@
+table Medidas
+	lineageTag: 215fc55c-94ef-4d0c-a310-85c9f37b78d7
+
+	measure 'Receita Total' = SUMX(Vendas, Vendas[Quantidade] * Vendas[Preco_Unitario] * (1 - Vendas[Desconto]))
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 35992183-7b7d-4102-b48b-748db84feb93
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Quantidade Vendida' = ```
+			SUM(Vendas[Quantidade]) 
+			```
+		formatString: 0
+		lineageTag: abba7732-c09d-4348-9b56-1b17ea8345a9
+
+	measure 'N° de Vendas' = ```
+			COUNTROWS(Vendas) 
+			```
+		formatString: 0
+		lineageTag: 345be8e0-81b1-4eeb-a55b-82493da55629
+
+	measure 'Ticket Médio' = ```
+			DIVIDE([Receita Total], [N° de Vendas]) 
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: a26c5f33-84b8-43d5-a03e-baf8eb176494
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Clientes Ativos' = ```
+			DISTINCTCOUNT(Vendas[ID_Cliente]) 
+			```
+		formatString: 0
+		lineageTag: c78a8e97-a767-4732-a95d-caaef89fe816
+
+	measure 'Preço Médio por Item' = ```
+			DIVIDE([Receita Total],[Quantidade Vendida])  
+			```
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 24609a13-0e82-461d-92a4-559ceca6e210
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Custo Total' = sumx(Vendas, Vendas[Quantidade] * RELATED(Produtos[Custo_Unitario]) )
+		formatString: 0
+		lineageTag: 187c28f3-bd55-4936-ad76-31b3c8af5751
+
+	measure 'Lucro Bruto' = [Receita Total] - [Custo Total]
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 6c4c6bc1-98b4-45bc-9d20-05ac9e0a5715
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Margem %' = ```
+			DIVIDE( [Lucro Bruto], [Receita Total]) 
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: beb823f1-6fc6-42e6-8d22-41c83ef5b044
+
+	measure 'Receita Mês Anterior' = ```
+			CALCULATE( [Receita Total], DATEADD(Calendario[Date], -1, MONTH)) 
+			```
+		lineageTag: a3d492c3-0d72-4f60-930c-ab2fed6b9c51
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Var. Mensal %' = ```
+			DIVIDE([Receita Total] - [Receita Mês Anterior], [Receita Mês Anterior]) 
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: ceb23ee7-38d9-44f0-8b61-b089ced284c3
+
+	measure 'Receita Ano Anterior' = CALCULATE( [Receita Total], SAMEPERIODLASTYEAR(Calendario[Date]))
+		lineageTag: 545c6b77-427b-4d00-bd1e-722d909e6f72
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Var. Anual %' = DIVIDE([Receita Total]- [Receita Ano Anterior], [Receita Ano Anterior])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 77ccbaad-5a30-451e-a929-56b6edeb0116
+
+	measure '% do total' = ```
+			DIVIDE([Receita Total], CALCULATE([Receita Total], ALL(Produtos))) 
+			```
+		lineageTag: 5e33a261-525b-43cb-bb4e-a9773e9cd0d0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Ranking Produto' = ```
+			RANKX(ALL(Produtos[Produto]), [Receita Total], ,DESC, Dense) 
+			```
+		formatString: 0
+		lineageTag: f17d2970-d70c-4450-9a23-2bb877511945
+
+	measure 'ranking vendedor' = ```
+			RANKX(ALL( Vendedores[Vendedor] ), [Receita Total], ,  DESC, Dense) 
+			```
+		formatString: 0
+		lineageTag: 40c8e146-8d06-4c0d-9423-2c757e7588a5
+
+	measure 'Receita top 1 Produto' = ```
+			CALCULATE( [Receita Total], TOPN(1, ALL(Produtos[Produto]) , [Receita Total])) 
+			```
+		lineageTag: 5c400f16-86ae-4346-abbe-f628ae6ec492
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Clientes novos' =
+			
+			VAR MinData = MIN ( Calendario[Date] )
+			VAR MaxData = MAX ( Calendario[Date] )
+			VAR PrimeiraCompra =
+			    ADDCOLUMNS (
+			        VALUES ( Vendas[ID_Cliente] ),
+			        "PrimeiraCompra",
+			            CALCULATE ( MIN ( Vendas[Data_Venda] ), ALL ( Calendario ) )
+			    )
+			RETURN
+			    COUNTROWS (
+			        FILTER (
+			            PrimeiraCompra,
+			            [PrimeiraCompra] >= MinData
+			                && [PrimeiraCompra] <= MaxData
+			        )
+			    )
+		formatString: 0
+		lineageTag: 5459d0ca-a7ce-4902-b33c-17f6aefdcb28
+
+	measure 'Receita por Cliente' = ```
+			DIVIDE([Receita Total], [Clientes Ativos]) 
+			```
+		lineageTag: d1f19f37-0ed7-4c1e-a117-23cf46ffad03
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Column
+		formatString: 0
+		lineageTag: 775075b9-1fef-43dd-821c-a2bfddaf4453
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = fd78b002650649b2b341a50dc4682405
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

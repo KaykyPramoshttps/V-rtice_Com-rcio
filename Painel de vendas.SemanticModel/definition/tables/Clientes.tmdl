@@ -1,0 +1,82 @@
+table Clientes
+	lineageTag: 9dc5a36f-4914-429a-8afd-5078f457968e
+
+	column ID_Cliente
+		dataType: string
+		lineageTag: c9254ef8-c272-4c91-a4bf-2b9e7709d1b3
+		summarizeBy: none
+		sourceColumn: ID_Cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nome_Cliente
+		dataType: string
+		lineageTag: ad28fe4e-d073-42a9-bf5f-9d04f4884da9
+		summarizeBy: none
+		sourceColumn: Nome_Cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tipo
+		dataType: string
+		lineageTag: c4762fa1-b6cd-46b2-85d8-00bbf24583de
+		summarizeBy: none
+		sourceColumn: Tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cidade
+		dataType: string
+		lineageTag: f66fc7d8-c242-42b5-aefe-cbe3771246e6
+		summarizeBy: none
+		sourceColumn: Cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column UF
+		dataType: string
+		lineageTag: 5dea58dd-441b-40b0-a5cb-b655531c35c6
+		summarizeBy: none
+		sourceColumn: UF
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data_Cadastro
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d84ec3da-d653-4872-a21c-8421f390737c
+		summarizeBy: none
+		sourceColumn: Data_Cadastro
+
+		variation Variation
+			isDefault
+			relationship: 1a101b68-291b-4700-b5b3-98cb0025ba24
+			defaultHierarchy: LocalDateTable_6e15e59b-2a0c-45ca-9a0a-333b27276ef8.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Clientes = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Users\Millena\Downloads\MEU_PROJETO_ANALISE\base_vendas_casa_conforto.xlsx"), null, true),
+				    Clientes_Sheet = Fonte{[Item="Clientes",Kind="Sheet"]}[Data],
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Clientes_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID_Cliente", type text}, {"Nome_Cliente", type text}, {"Tipo", type text}, {"Cidade", type text}, {"UF", type text}, {"Data_Cadastro", Int64.Type}}),
+				    #"Linhas Filtradas" = Table.SelectRows(#"Tipo Alterado", each ([Cidade] <> null and [Cidade] <> "")),
+				    #"Colocar Cada Palavra Em Maiúscula" = Table.TransformColumns(#"Linhas Filtradas",{{"Nome_Cliente", Text.Proper, type text}}),
+				    #"Texto em Minúscula" = Table.TransformColumns(#"Colocar Cada Palavra Em Maiúscula",{{"Nome_Cliente", Text.Lower, type text}}),
+				    #"Texto Aparado" = Table.TransformColumns(#"Texto em Minúscula",{{"Nome_Cliente", Text.Trim, type text}}),
+				    #"Colocar Cada Palavra Em Maiúscula1" = Table.TransformColumns(#"Texto Aparado",{{"Nome_Cliente", Text.Proper, type text}}),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Colocar Cada Palavra Em Maiúscula1",{{"Data_Cadastro", type date}}),
+				    #"Texto Aparado1" = Table.TransformColumns(#"Tipo Alterado1",{{"Cidade", Text.Trim, type text}}),
+				    #"Colocar Cada Palavra Em Maiúscula2" = Table.TransformColumns(#"Texto Aparado1",{{"Cidade", Text.Proper, type text}})
+				in
+				    #"Colocar Cada Palavra Em Maiúscula2"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

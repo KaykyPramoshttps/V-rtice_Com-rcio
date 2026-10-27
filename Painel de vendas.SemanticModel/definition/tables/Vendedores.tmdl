@@ -1,0 +1,43 @@
+table Vendedores
+	lineageTag: f1985acb-013d-4cad-b778-5b5b55902ab3
+
+	column ID_Vendedor
+		dataType: string
+		lineageTag: 5b4c4f96-0b87-4af5-a018-a65f991b9e55
+		summarizeBy: none
+		sourceColumn: ID_Vendedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Vendedor
+		dataType: string
+		lineageTag: 27602d4a-9521-43ee-be73-c08e9497ca22
+		summarizeBy: none
+		sourceColumn: Vendedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Regiao
+		dataType: string
+		lineageTag: f303117d-c559-4b5d-83df-12fbda526e31
+		summarizeBy: none
+		sourceColumn: Regiao
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Vendedores = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Users\Millena\Downloads\MEU_PROJETO_ANALISE\base_vendas_casa_conforto.xlsx"), null, true),
+				    Vendedores_Sheet = Fonte{[Item="Vendedores",Kind="Sheet"]}[Data],
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Vendedores_Sheet,{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}}),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(#"Tipo Alterado", [PromoteAllScalars=true]),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID_Vendedor", type text}, {"Vendedor", type text}, {"Regiao", type text}})
+				in
+				    #"Tipo Alterado1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegação
+

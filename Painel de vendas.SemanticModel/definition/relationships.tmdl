@@ -1,0 +1,26 @@
+relationship AutoDetected_e8185681-494e-4eec-82cb-df984f2a6a17
+	fromColumn: Vendas.ID_Cliente
+	toColumn: Clientes.ID_Cliente
+
+relationship AutoDetected_6993b000-b88a-44bc-a238-4edc4e628ceb
+	fromColumn: Vendas.ID_Produto
+	toColumn: Produtos.ID_Produto
+
+relationship AutoDetected_c80e7c78-3965-44d3-aca8-3656545dc9a3
+	fromColumn: Vendas.ID_Vendedor
+	toColumn: Vendedores.ID_Vendedor
+
+relationship 1a101b68-291b-4700-b5b3-98cb0025ba24
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Clientes.Data_Cadastro
+	toColumn: LocalDateTable_6e15e59b-2a0c-45ca-9a0a-333b27276ef8.Date
+
+relationship 0cee882e-3163-48b7-8096-4fd7c4186c97
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Calendario.Date
+	toColumn: LocalDateTable_e99a0c12-fe43-4c04-9e51-5bacd82241ee.Date
+
+relationship 03c571c2-ef59-5a59-daa1-8141842263af
+	fromColumn: Vendas.Data_Venda
+	toColumn: Calendario.Date
+
