@@ -1,2 +1,45 @@
-# Vértice_Comércio
-Dashboard de vendas em Power BI (PBIP) com análise de receita, lucro bruto, margem, ticket médio e comparativos mensais e anuais, por produto, categoria, vendedor, canal e região. Modelo estrela com medidas DAX.
+# 📊 Painel de Vendas – Power BI
+
+Dashboard de análise de vendas de uma loja fictícia (**Casa Conforto**), desenvolvido em Power BI para praticar ETL, modelagem de dados e criação de medidas em DAX.
+
+## 🎯 Objetivo
+Acompanhar o desempenho comercial e responder perguntas como:
+- Quanto estamos faturando e qual a margem de lucro?
+- Quais produtos e categorias mais vendem?
+- Qual o desempenho de cada vendedor e região?
+- Como a receita evolui em relação ao mês e ao ano anteriores?
+- Qual canal de venda traz mais resultado?
+
+## 🖼️ Visão geral do painel
+| Elemento | Descrição |
+|---|---|
+| Cartões (KPIs) | Receita Total, Lucro Bruto, Margem %, Ticket Médio e Nº de Vendas |
+| Gráfico de linhas | Receita Total x Receita do Ano Anterior |
+| Gráfico de colunas | Receita por Produto e Categoria |
+| Gráfico de colunas | Vendas por Canal ao longo do tempo |
+| Mapa | Receita por Região |
+| Segmentações | Período, Vendedor e Categoria |
+
+![Prévia do dashboard](imagens/dashboard.png)
+
+## 🗂️ Modelo de dados
+Modelo em estrela, com a tabela fato **Vendas** ligada às dimensões **Produtos**, **Clientes**, **Vendedores** e **Calendário**.
+
+## 🧮 Principais medidas DAX
+- `Receita Total`, `Custo Total`, `Lucro Bruto`, `Margem %`
+- `Ticket Médio`, `Clientes Ativos`, `Receita por Cliente`
+- `Var. Mensal %` e `Var. Anual %` (inteligência de tempo)
+- `Ranking Produto` e `Ranking Vendedor` (RANKX)
+- `% do total` e `Clientes novos`
+
+## 🛠️ Ferramentas
+Power BI Desktop (formato PBIP) · Power Query · DAX · Excel (fonte de dados)
+
+## ▶️ Como abrir
+1. Clone o repositório.
+2. Abra o arquivo `Painel_de_vendas.pbip` no Power BI Desktop.
+3. Em *Transformar dados*, ajuste o caminho do arquivo Excel de origem (`base_vendas_casa_conforto.xlsx`) para o local no seu computador.
+4. Clique em **Atualizar**.
+
+## 👩‍💻 Autor
+Seu nome · [LinkedIn](link)
