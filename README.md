@@ -35,5 +35,10 @@ Modelo em estrela, com a tabela fato **Vendas** ligada às dimensões **Produtos
 ## 🛠️ Ferramentas
 Power BI Desktop (formato PBIP) · Power Query · DAX · Excel (fonte de dados)
 
-## 👩‍💻 Autor
-Seu nome · [LinkedIn](link)
+## 👤 Autor
+
+**Kayky Pramos**
+
+- GitHub: [@KaykyPramoshttps](https://github.com/KaykyPramoshttps)
+- LinkedIn: [Kayky Pereira Ramos](https://www.linkedin.com/in/kayky-pereira-ramos-180770274)
+
